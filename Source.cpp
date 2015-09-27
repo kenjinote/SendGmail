@@ -1,18 +1,18 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#pragma comment(lib,"crypt32")
-#pragma comment(lib,"libeay32")
-#pragma comment(lib,"ssleay32")
-#pragma comment(lib,"ws2_32")
-#pragma comment(lib,"shlwapi")
+#pragma comment(lib, "crypt32")
+#pragma comment(lib, "libeay32")
+#pragma comment(lib, "ssleay32")
+#pragma comment(lib, "ws2_32")
+#pragma comment(lib, "shlwapi")
 
-#include<winsock2.h>
-#include"openssl/ssl.h"
-#include"openssl/rand.h"
-#include<shlwapi.h>
+#include <winsock2.h>
+#include "openssl/ssl.h"
+#include "openssl/rand.h"
+#include <shlwapi.h>
 
-#define GMAIL_ACCOUNT "ƒW[ƒƒCƒ‹ƒAƒJƒEƒ“ƒgiƒ[ƒ‹ƒAƒhƒŒƒXj‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B"
-#define GMAIL_PASSWORD "ƒW[ƒƒCƒ‹ƒpƒXƒ[ƒh‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B"
+#define GMAIL_ACCOUNT "ã‚¸ãƒ¼ãƒ¡ã‚¤ãƒ«ã‚¢ã‚«ã‚¦ãƒ³ãƒˆï¼ˆãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ï¼‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚"
+#define GMAIL_PASSWORD "ã‚¸ãƒ¼ãƒ¡ã‚¤ãƒ«ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚"
 
 CHAR convtobase(const CHAR c)
 {
@@ -120,11 +120,11 @@ BOOL SendMail(
 
 	DWORD i;
 
-	CHAR szStr[1024], szStrRcv[1024 * 50];//‚±‚±‚Ì§ŒÀ‚à‚È‚­‚µ‚½‚¢
+	CHAR szStr[1024], szStrRcv[1024 * 50];//ã“ã“ã®åˆ¶é™ã‚‚ãªãã—ãŸã„
 
 	if (WSAStartup(MAKEWORD(1, 1), &wsaData))
 	{
-		lstrcpyA(szStrRcv, "ƒGƒ‰[: WinSock‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½B\r\n");
+		lstrcpyA(szStrRcv, "ã‚¨ãƒ©ãƒ¼: WinSockã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\r\n");
 		WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), szStrRcv, lstrlenA(szStrRcv), &dwWritten, 0);
 		bRet = FALSE;
 		goto END0;
@@ -134,17 +134,17 @@ BOOL SendMail(
 	lpszBase64Code = (LPSTR*)GlobalAlloc(GMEM_ZEROINIT, sizeof(LPSTR)*dwAttachmentCount);
 	if (lpszBase64Code == 0)
 	{
-		lstrcpyA(szStrRcv, "ƒGƒ‰[: “Y•t‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½B\r\n");
+		lstrcpyA(szStrRcv, "ã‚¨ãƒ©ãƒ¼: æ·»ä»˜ã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\r\n");
 		WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), szStrRcv, lstrlenA(szStrRcv), &dwWritten, 0);
 		bRet = FALSE;
 		goto END1;
 	}
-	for (i = 0; i<dwAttachmentCount; i++)
+	for (i = 0; i<dwAttachmentCount; ++i)
 	{
 		HANDLE hFile1; hFile1 = CreateFileA(lpszAttachment2[i], GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL);
 		if (hFile1 == INVALID_HANDLE_VALUE)
 		{
-			wsprintfA(szStrRcv, "ƒGƒ‰[: “Y•tƒtƒ@ƒCƒ‹‚ªŠJ‚¯‚Ü‚¹‚ñ‚Å‚µ‚½B[%s]\r\n", PathFindFileNameA(lpszAttachment2[i]));
+			wsprintfA(szStrRcv, "ã‚¨ãƒ©ãƒ¼: æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ãŒé–‹ã‘ã¾ã›ã‚“ã§ã—ãŸã€‚[%s]\r\n", PathFindFileNameA(lpszAttachment2[i]));
 			WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), szStrRcv, lstrlenA(szStrRcv), &dwWritten, 0);
 			bRet = FALSE;
 			goto END2;
@@ -154,7 +154,7 @@ BOOL SendMail(
 		if (!GetFileSizeEx(hFile1, &FileSize))
 		{
 			CloseHandle(hFile1);
-			wsprintfA(szStrRcv, "ƒGƒ‰[: “Y•tƒtƒ@ƒCƒ‹ƒTƒCƒY‚ğæ“¾‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B[%s]\r\n", PathFindFileNameA(lpszAttachment2[i]));
+			wsprintfA(szStrRcv, "ã‚¨ãƒ©ãƒ¼: æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºã‚’å–å¾—ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚[%s]\r\n", PathFindFileNameA(lpszAttachment2[i]));
 			WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), szStrRcv, lstrlenA(szStrRcv), &dwWritten, 0);
 			bRet = FALSE;
 			goto END2;
@@ -162,7 +162,7 @@ BOOL SendMail(
 		if (FileSize.HighPart || FileSize.LowPart>1024 * 1024 * 25 || FileSize.LowPart == 0)
 		{
 			CloseHandle(hFile1);
-			wsprintfA(szStrRcv, "ƒGƒ‰[: “Y•tƒtƒ@ƒCƒ‹ƒTƒCƒY‚ªˆÙí‚Å‚·B[%s]\r\n", PathFindFileNameA(lpszAttachment2[i]));
+			wsprintfA(szStrRcv, "ã‚¨ãƒ©ãƒ¼: æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºãŒç•°å¸¸ã§ã™ã€‚[%s]\r\n", PathFindFileNameA(lpszAttachment2[i]));
 			WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), szStrRcv, lstrlenA(szStrRcv), &dwWritten, 0);
 			bRet = FALSE;
 			goto END2;
@@ -171,7 +171,7 @@ BOOL SendMail(
 		if (p == NULL)
 		{
 			CloseHandle(hFile1);
-			wsprintfA(szStrRcv, "ƒGƒ‰[: “Y•tƒtƒ@ƒCƒ‹‚Ì‚½‚ß‚Ìƒƒ‚ƒŠ‚ªŠm•Û‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B[%s]\r\n", PathFindFileNameA(lpszAttachment2[i]));
+			wsprintfA(szStrRcv, "ã‚¨ãƒ©ãƒ¼: æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã®ãŸã‚ã®ãƒ¡ãƒ¢ãƒªãŒç¢ºä¿ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚[%s]\r\n", PathFindFileNameA(lpszAttachment2[i]));
 			WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), szStrRcv, lstrlenA(szStrRcv), &dwWritten, 0);
 			bRet = FALSE;
 			goto END2;
@@ -182,7 +182,7 @@ BOOL SendMail(
 		if (end1 == 0)
 		{
 			GlobalFree(p);
-			wsprintfA(szStrRcv, "ƒGƒ‰[: “Y•tƒtƒ@ƒCƒ‹‚©‚çƒf[ƒ^‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½B[%s]\r\n", PathFindFileNameA(lpszAttachment2[i]));
+			wsprintfA(szStrRcv, "ã‚¨ãƒ©ãƒ¼: æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚ã¾ã›ã‚“ã§ã—ãŸã€‚[%s]\r\n", PathFindFileNameA(lpszAttachment2[i]));
 			WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), szStrRcv, lstrlenA(szStrRcv), &dwWritten, 0);
 			bRet = FALSE;
 			goto END2;
@@ -191,7 +191,7 @@ BOOL SendMail(
 		GlobalFree(p);
 		if (lpszBase64Code[i] == 0)
 		{
-			wsprintfA(szStrRcv, "ƒGƒ‰[: “Y•tƒtƒ@ƒCƒ‹‚ÌBase64ƒGƒ“ƒR[ƒh‚É¸”s‚µ‚Ü‚µ‚½B[%s]\r\n", PathFindFileNameA(lpszAttachment2[i]));
+			wsprintfA(szStrRcv, "ã‚¨ãƒ©ãƒ¼: æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã®Base64ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ã«å¤±æ•—ã—ã¾ã—ãŸã€‚[%s]\r\n", PathFindFileNameA(lpszAttachment2[i]));
 			WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), szStrRcv, lstrlenA(szStrRcv), &dwWritten, 0);
 			bRet = FALSE;
 			goto END2;
@@ -201,7 +201,7 @@ BOOL SendMail(
 	lpHost = gethostbyname("smtp.gmail.com");
 	if (lpHost == 0)
 	{
-		wsprintfA(szStrRcv, "ƒGƒ‰[: ƒ[ƒ‹ƒT[ƒo[‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B[%s]\r\n", "smtp.gmail.com");
+		wsprintfA(szStrRcv, "ã‚¨ãƒ©ãƒ¼: ãƒ¡ãƒ¼ãƒ«ã‚µãƒ¼ãƒãƒ¼ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚[%s]\r\n", "smtp.gmail.com");
 		WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), szStrRcv, lstrlenA(szStrRcv), &dwWritten, 0);
 		bRet = FALSE;
 		goto END2;
@@ -209,7 +209,7 @@ BOOL SendMail(
 	s = socket(PF_INET, SOCK_STREAM, 0);
 	if (s == INVALID_SOCKET)
 	{
-		lstrcpyA(szStrRcv, "ƒGƒ‰[: ƒ\ƒPƒbƒg‚ğƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B\r\n");
+		lstrcpyA(szStrRcv, "ã‚¨ãƒ©ãƒ¼: ã‚½ã‚±ãƒƒãƒˆã‚’ã‚ªãƒ¼ãƒ—ãƒ³ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚\r\n");
 		WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), szStrRcv, lstrlenA(szStrRcv), &dwWritten, 0);
 		bRet = FALSE;
 		goto END2;
@@ -219,7 +219,7 @@ BOOL SendMail(
 	sockadd.sin_addr = *((LPIN_ADDR)*lpHost->h_addr_list);
 	if (connect(s, (PSOCKADDR)&sockadd, sizeof(sockadd)))
 	{
-		lstrcpyA(szStrRcv, "ƒGƒ‰[: ƒT[ƒo[ƒ\ƒPƒbƒg‚ÉÚ‘±‚É¸”s‚µ‚Ü‚µ‚½B\r\n");
+		lstrcpyA(szStrRcv, "ã‚¨ãƒ©ãƒ¼: ã‚µãƒ¼ãƒãƒ¼ã‚½ã‚±ãƒƒãƒˆã«æ¥ç¶šã«å¤±æ•—ã—ã¾ã—ãŸã€‚\r\n");
 		WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), szStrRcv, lstrlenA(szStrRcv), &dwWritten, 0);
 		bRet = FALSE;
 		goto END3;
@@ -237,7 +237,7 @@ BOOL SendMail(
 	SSL_set_fd(ssl, s);
 	if (SSL_connect(ssl) <= 0)
 	{
-		lstrcpyA(szStrRcv, "ƒGƒ‰[: SSL‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½B\r\n");
+		lstrcpyA(szStrRcv, "ã‚¨ãƒ©ãƒ¼: SSLã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\r\n");
 		WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), szStrRcv, lstrlenA(szStrRcv), &dwWritten, 0);
 		bRet = FALSE;
 		goto END4;
@@ -328,7 +328,7 @@ BOOL SendMail(
 	SSL_read(ssl, szStrRcv, sizeof(szStrRcv)); szStrRcv[err] = '\0';
 	if (bLog){ WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), "recv: ", 6, &dwWritten, 0); WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), szStrRcv, lstrlenA(szStrRcv), &dwWritten, 0); }
 
-	CHAR lpszSubject[1024];//‚±‚±‚Ì§ŒÀ‚à‚È‚­‚µ‚½‚¢
+	CHAR lpszSubject[1024];//ã“ã“ã®åˆ¶é™ã‚‚ãªãã—ãŸã„
 	LPSTR lpTemp; lpTemp = MySJisToJis(lpszSubject2);
 	if (lpTemp)
 	{
@@ -376,7 +376,7 @@ BOOL SendMail(
 		token = strtok(0, "\r\n");
 	}
 
-	for (i = 0; i<dwAttachmentCount; i++)
+	for (i = 0; i<dwAttachmentCount; ++i)
 	{
 		lstrcpyA(szStr, "--frontier\r\n");
 		SSL_write(ssl, szStr, lstrlenA(szStr));
@@ -448,7 +448,7 @@ END3:
 	shutdown(s, SD_BOTH);
 	closesocket(s);
 END2:
-	for (i = 0; i<dwAttachmentCount; i++)
+	for (i = 0; i<dwAttachmentCount; ++i)
 	{
 		GlobalFree(lpszBase64Code[i]);
 	}
@@ -464,25 +464,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInst, LPSTR pCmdLine, int 
 	//if (argc<2)
 	//{
 	//	DWORD dwWritten;
-	//	LPCSTR lpszUsage = "­‚È‚­‚Æ‚à‚P‚Â‚Ìˆø”‚ª•K—v‚Å‚·B\r\n";
+	//	LPCSTR lpszUsage = "å°‘ãªãã¨ã‚‚ï¼‘ã¤ã®å¼•æ•°ãŒå¿…è¦ã§ã™ã€‚\r\n";
 	//	WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), lpszUsage, lstrlenA(lpszUsage), &dwWritten, 0);
 	//}
 	//else
 	//{
 	//	DWORD dwStringLength = 1;
 	//	int i;
-	//	for (i = 1; i<argc; i++)
+	//	for (i = 1; i<argc; ++i)
 	//	{
 	//		dwStringLength += lstrlenA(argv[i]) + 2;
 	//	}
 	//	LPSTR lpszFileList = (LPSTR)GlobalAlloc(GMEM_FIXED, dwStringLength);
 	//	lpszFileList[0] = 0;
-	//	for (i = 1; i<argc; i++)
+	//	for (i = 1; i<argc; ++i)
 	//	{
 	//		lstrcatA(lpszFileList, argv[i]);
 	//		lstrcatA(lpszFileList, "\r\n");
 	//	}
-	//	SendMail(GMAIL_ACCOUNT, GMAIL_ACCOUNT, "ƒtƒ@ƒCƒ‹‚ğ“Y•t‚µ‚Ü‚·", lpszFileList, &argv[1], argc - 1, 1);
+	//	SendMail(GMAIL_ACCOUNT, GMAIL_ACCOUNT, "ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ·»ä»˜ã—ã¾ã™", lpszFileList, &argv[1], argc - 1, 1);
 	//	GlobalFree(lpszFileList);
 	//}
 	return 0;
